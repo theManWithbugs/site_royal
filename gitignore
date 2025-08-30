@@ -1,0 +1,32 @@
+
+# Ambiente virtual
+venv/
+ENV/
+env/
+*.pyc
+__pycache__/
+
+# Arquivos do Django
+*.sqlite3
+db.sqlite3
+
+# Arquivos estáticos coletados
+staticfiles/
+static_collected/
+
+# Configurações locais
+*.env
+.env
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

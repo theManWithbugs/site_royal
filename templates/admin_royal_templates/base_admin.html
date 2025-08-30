@@ -1,0 +1,53 @@
+{% load static %}
+<head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+      <link rel="stylesheet" href="{% static 'css_admin/main_admin.css' %}">
+       <title>{% block title %}HOME |{% endblock %}</title>
+      {% block css %}
+      {% endblock css %}
+</head>
+<body>
+
+<div class="container-fluid p-0" style="min-height: 100vh; background-color: #f8f9fa;">
+  <!-- Menu lateral -->
+  <div class="row g-0">
+    <div class="col-md-2 bg-dark text-white p-3 d-flex flex-column" style="min-height: 100vh;">
+      <h4 class="mb-4">
+        <img src="{% static 'img/pizza_icone_white.png' %}" alt="logo" width="35" height="35" class="me-2">
+        Pizza Delivery
+      </h4>
+         <a href="{% url 'home' %}" class="text-white text-decoration-none py-2">🏠 Home</a>
+         <a href="#" class="text-white text-decoration-none py-2">📊 Dashboard</a>
+         <a href="#" class="text-white text-decoration-none py-2">🛒 Pedidos</a>
+         <a href="#" class="text-white text-decoration-none py-2">🍕 Cardápio</a>
+         <a href="#" class="text-white text-decoration-none py-2">⚙️ Configurações</a>
+         <a href="{% url 'menu_invest' %}" class="text-white text-decoration-none py-2">💰 Investimentos</a>
+    </div>
+
+     <div class="col py-3 content">
+         <div class="col-md-auto p-2">
+            <nav class="navbar navbar-light bg-danger text-white rounded mb-4 p-3">
+               <span class="h5 mb-0" id="texto_navbar"></span>
+               <div>
+                  <img src="{% static 'img/pizza_icone_white.png' %}" alt="icone" width="40" height="40">
+               </div>
+            </nav>
+         </div>
+         {% block content %}
+         {% endblock content %}
+      </div>
+  </div>
+</div>
+
+</body>
+
+<!-- Gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="{% static 'js/admin_royal_main.js' %}"></script>
+{% block js %}
+{% endblock js %}
