@@ -36,6 +36,23 @@ MIDDLEWARE = [
 ROOT_URLCONF = "setup.urls"
 WSGI_APPLICATION = "setup.wsgi.application"
 
+# Templates (correção para o Admin funcionar)
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],  # cria essa pasta se não existir
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
 # Banco de dados
 DATABASES = {
     "default": {
@@ -61,7 +78,4 @@ USE_TZ = True
 # Arquivos estáticos
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# Default primary key
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+ST
