@@ -1,1 +1,1 @@
-web: gunicorn site_royal.wsgi
+web: gunicorn setup.wsgi
