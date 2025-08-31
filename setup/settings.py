@@ -50,7 +50,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "site_royal.wsgi.application"
+ROOT_URLCONF = "setup.urls"
+WSGI_APPLICATION = "setup.wsgi.application"
 
 # Banco de dados (SQLite)
 DATABASES = {
