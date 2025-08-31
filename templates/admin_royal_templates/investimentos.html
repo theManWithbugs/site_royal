@@ -5,6 +5,14 @@
 
 {% block content %}
 
-
+<div class="container">
+  <div class="bg-white rounded border border-black p-3">
+    <form action="{% url 'admin_royal:menu_invest' %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Registrar</button>
+    </form>
+  </div>
+</div>
 
 {% endblock content %}

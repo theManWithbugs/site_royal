@@ -1,5 +1,6 @@
-import os
+from django.contrib.messages import constants as messages
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -7,6 +8,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 ALLOWED_HOSTS = ["localhost", os.environ.get("RENDER_EXTERNAL_HOSTNAME")]
+
+#Antes de enviar o commit deve comentar isso
+# SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
+# DEBUG = os.environ.get("DEBUG", "False") == "False"
+# ALLOWED_HOSTS = ["*"]
 
 # Aplicações
 INSTALLED_APPS = [
@@ -68,6 +74,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 
 # Internacionalização
 LANGUAGE_CODE = "en-us"

@@ -37,3 +37,16 @@ document.addEventListener('DOMContentLoaded', function() {
     texto_navbar.textContent = 'Investimentos Royal';
   }
 })
+
+// fetch('/response_invest/')
+//     .then(response => {
+//         if (window.chartDrawn) return;
+//         window.chartDrawn = true;
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//     })
+//     .catch(error => console.error('Erro:', error));
