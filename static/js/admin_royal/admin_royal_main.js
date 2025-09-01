@@ -14,18 +14,6 @@ new Chart(ctxVendas, {
     options: { responsive: true, plugins: { legend: { display: false } } }
 });
 
-const ctxPedidos = document.getElementById('chartPedidos');
-new Chart(ctxPedidos, {
-    type: 'doughnut',
-    data: {
-        labels: ['Concluídos', 'Pendentes', 'Cancelados'],
-        datasets: [{
-            data: [90, 25, 10],
-            backgroundColor: ['#dc3545', '#ffc107', '#6c757d']
-        }]
-    },
-    options: { responsive: true }
-});
 
 document.addEventListener('DOMContentLoaded', function() {
   const title = document.title.trim();
@@ -38,15 +26,29 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })
 
-// fetch('/response_invest/')
-//     .then(response => {
-//         if (window.chartDrawn) return;
-//         window.chartDrawn = true;
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return response.json();
-//     })
-//     .then(data => {
-//     })
-//     .catch(error => console.error('Erro:', error));
+fetch('/admin_royal/response_invest/')
+    .then(response => {
+        if (window.chartDrawn) return;
+        window.chartDrawn = true;
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+      console.log(data.data);
+
+      const ctxPedidos = document.getElementById('chartPedidos');
+      new Chart(ctxPedidos, {
+          type: 'doughnut',
+          data: {
+              labels: ['Wilian', 'Victor'],
+              datasets: [{
+                  data: [90, 25],
+                  backgroundColor: ['#dc3545', '#ffc107']
+              }]
+          },
+          options: { responsive: true }
+      });
+    })
+    .catch(error => console.error('Erro:', error));

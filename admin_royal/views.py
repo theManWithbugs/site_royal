@@ -2,6 +2,9 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from . serializers import *
 from . forms import *
 
 def login_view(request):
@@ -52,3 +55,12 @@ def menu_investimentos(request):
     }
 
     return render(request, template_name, context)
+
+class response_invest(APIView):
+    def get(self, _request):
+
+        objs = Investimentos.objects.all()
+
+        invest_serializer = InvestSerializer(objs, many=True)
+
+        return Response({'data': invest_serializer.data})
