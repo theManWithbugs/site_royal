@@ -36,19 +36,26 @@ fetch('/admin_royal/response_invest/')
         return response.json();
     })
     .then(data => {
-      console.log(data.data);
+        // console.log(data.data);
 
-      const ctxPedidos = document.getElementById('chartPedidos');
-      new Chart(ctxPedidos, {
-          type: 'doughnut',
-          data: {
-              labels: ['Wilian', 'Victor'],
-              datasets: [{
-                  data: [90, 25],
-                  backgroundColor: ['#dc3545', '#ffc107']
-              }]
-          },
-          options: { responsive: true }
-      });
+        // data.data.forEach(dados => {
+        //     console.log('dados.nome);
+        // })
+
+        let user_0 = data.data[0];
+        let user_1 = data.data[1];
+
+        const ctxPedidos = document.getElementById('chartPedidos');
+        new Chart(ctxPedidos, {
+            type: 'doughnut',
+            data: {
+                labels: [user_0["nome"], user_1["nome"]],
+                datasets: [{
+                    data: [user_0["total"], user_1["total"]],
+                    backgroundColor: ['#dc3545', '#ffc107']
+                }]
+            },
+            options: { responsive: true }
+        });
     })
     .catch(error => console.error('Erro:', error));

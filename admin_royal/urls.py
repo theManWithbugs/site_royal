@@ -6,6 +6,8 @@ app_name = "admin_royal"
 
 urlpatterns = [
   path('', views.login_view, name='login'),
+  path('logout/', views.logout_view, name='logout'),
+
   path('home/', views.home, name='home'),
   path('investimentos/', views.menu_investimentos, name='menu_invest'),
 
