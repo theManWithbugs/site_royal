@@ -9,9 +9,9 @@
        <link rel="stylesheet" href="{% static 'css/admin_royal/btn_login.css' %}">
        <title>Login-administração</title>
    </head>
-   <body>
 
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+<body>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 75vh;">
         <div class="card shadow-lg p-4" style="max-width: 420px; width: 100%; border-radius: 1rem;">
             <form action="{% url 'admin_royal:login' %}" method="post">
                 {% csrf_token %}
@@ -45,7 +45,6 @@
             </form>
         </div>
     </div>
-
-   </body>
+</body>
    <script src="{% static 'js/bs5/bootstrap.bundle.min.js' %}"></script>
 </html>

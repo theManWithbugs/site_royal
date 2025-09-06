@@ -9,7 +9,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 ALLOWED_HOSTS = ["localhost", os.environ.get("RENDER_EXTERNAL_HOSTNAME")]
 
-#Antes de enviar o commit deve comentar isso
+# Antes de enviar o commit deve comentar isso
 # SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
 # DEBUG = os.environ.get("DEBUG", "False") == "False"
 # ALLOWED_HOSTS = ["*"]

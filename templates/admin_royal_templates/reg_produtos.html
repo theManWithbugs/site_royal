@@ -1,0 +1,45 @@
+{% extends 'admin_royal_templates/base_admin.html' %}
+{% load static %}
+
+<title>{% block title %}HOME | REG-ITEMS{% endblock %}</title>
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="bg-white p-4 rounded">
+      <div class="d-flex justify-content-center">
+        <h5>Registrar pizza</h5>
+      </div>
+        <form action="{% url 'admin_royal:reg_items' %}" method="post">{% csrf_token %}
+            {{ form_pizza.as_p }}
+            <button type="submit" name="form_type" value="form_pizza">Enviar</button>
+        </form>
+    </div>
+</div>
+
+<div class="container mt-2">
+    <div class="bg-white p-4 rounded">
+      <div class="d-flex justify-content-center">
+        <h5>Registrar sabor</h5>
+      </div>
+        <form action="{% url 'admin_royal:reg_items' %}" method="post">{% csrf_token %}
+            {{ form_sabor.as_p }}
+            <button type="submit" name="form_type" value="form_sabor">Enviar</button>
+        </form>
+    </div>
+</div>
+
+<div class="container mt-2">
+    <div class="bg-white p-4 rounded">
+      <div class="d-flex justify-content-center">
+        <h5>Registrar tamanho</h5>
+      </div>
+        <form action="{% url 'admin_royal:reg_items' %}" method="post">{% csrf_token %}
+            {{ form_size.as_p }}
+            <button type="submit" name="form_type" value="form_size">Enviar</button>
+        </form>
+    </div>
+</div>
+<br><br>
+
+{% endblock content %}

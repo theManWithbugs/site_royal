@@ -3,7 +3,6 @@ from django.db import models
 class Tamanho(models.Model):
     nome = models.CharField(max_length=50)  # Ex.: Pequena, Média, Grande
     diametro_cm = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)  # opcional
-    preco_base = models.DecimalField(max_digits=6, decimal_places=2)  # preço padrão para esse tamanho
 
     def __str__(self):
         return self.nome

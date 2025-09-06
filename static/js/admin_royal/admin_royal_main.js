@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     texto_navbar.textContent = 'Painel Royal';
   } else if (title === 'HOME | INVESTIMENTOS') {
     texto_navbar.textContent = 'Investimentos Royal';
+  } else if (title === 'HOME | REG-ITEMS') {
+    texto_navbar.textContent = 'Registrar Produtos';
   }
 })
 
@@ -39,7 +41,7 @@ fetch('/admin_royal/response_invest/')
         // console.log(data.data);
 
         // data.data.forEach(dados => {
-        //     console.log('dados.nome);
+        //     console.log(dados.nome);
         // })
 
         let user_0 = data.data[0];
@@ -57,5 +59,28 @@ fetch('/admin_royal/response_invest/')
             },
             options: { responsive: true }
         });
+    })
+    .catch(error => console.error('Erro:', error));
+
+fetch('/admin_royal/response_titulo/')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+
+        box = document.getElementById('box');
+
+        ul = document.createElement('ul');
+        ul.classList.add('list-group');
+        data.forEach(item => {
+            li = document.createElement('li');
+            li.textContent = `INVESTIDOR: ${item.nome.toUpperCase()} | INVESTIMENTO: ${item.titulo} | VALOR: ${item.total}`;
+            li.classList.add('list-group-item');
+            ul.appendChild(li);
+        });
+        box.appendChild(ul);
     })
     .catch(error => console.error('Erro:', error));
