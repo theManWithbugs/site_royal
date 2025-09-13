@@ -4,11 +4,26 @@ from core.views import *
 
 urlpatterns = [
     path('base/', views.base_view, name="base"),
-    path('', views.login_cliente, name="login_cliente"),
+    path('login/', views.login_cliente, name="login_cliente"),
     path('logout/', views.logoutView, name='logout'),
-    path('home', views.home_view, name="home"),
-    path('home/add_items/', views.add_items, name='add_items'),
+    path('', views.home_view, name="home"),
 
+    #Tratando aqui
+    # path('home/add_items/', views.add_items, name='add_items'),
+
+    path("carrinho/", views.get_or_create_cart, name="add_cart"),
+    path('home/pizzas_available/', views.pizzas_available, name='pizzas_dispo'),
+    path('home/drinks_available/', views.drinks_available, name='drinks_dispo'),
 
     path('form_cadastro/', views.formulario_cadastro, name='form_cadastro'),
+
+    path('pagina_test/', views.pagina_teste, name='teste'),
+
+    #Paginar de add item selecionado
+    path('home/add_pizza_sel/<int:id>/', views.add_pizza_sel, name='add_pizza_sel'),
+
+    #Items vinculados ao UUID especifico
+    path('home/carrinho/', views.ver_carrinho, name='carrinho'),
+
+    path('excluir_item/<int:id>/', views.excluir_item, name='excluir_item')
 ]

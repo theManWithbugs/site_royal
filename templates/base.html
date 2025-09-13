@@ -6,15 +6,16 @@
     <link rel="stylesheet" href="{% static 'css/bs5/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/buttons/btn_logout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons/button_home.css' %}">
     {% block css %}
     {% endblock css %}
-    <title>title</title>
+    <title>{% block title %}HOME |{% endblock title %}</title>
 </head>
 
 <nav class="navbar navbar-light bg-transparent"
     style="backdrop-filter: blur(15px); position: relative;">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'admin_royal:home' %}">
+            <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'img/icone_royal.jpg' %}" alt="" width="40" height="40" class="rounded">
                 <span class="text-white p-1">68-992092399
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="25px" class="mb-1">
@@ -24,7 +25,7 @@
                     </svg>
                 </span>
             </a>
-            <a href="#" class="border border-1 p-1 rounded bg-white ms-auto me-4" style="text-decoration: none; color: black;">
+            <a href="{% url 'carrinho' %}" class="border border-1 p-1 rounded bg-white ms-auto me-3" style="text-decoration: none; color: black;">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="30">
                         <path d="M24 48C10.7 48 0 58.7 0 72C0 85.3 10.7 96 24 96L69.3 96C73.2 96 76.5 98.8 77.2 102.6L129.3
@@ -45,10 +46,27 @@
         </div>
 </nav>
 
+<script src="{% static 'js/sweetalert2@11.js' %}"></script>
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            Swal.fire({
+                position: "top",
+                title: "{% if 'success' in message.tags %}Sucesso!{% else %}Mensagem!{% endif %}",
+                icon: "{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}",
+                text: "{{ message|escapejs }}",
+                timer: 2500,
+                showConfirmButton: false
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+
 {% block content %}
     <div class="container"></div>
 {% endblock content %}
 
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/bs5/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'js/sweetalert2@11.js' %}"></script>
+{% block js %}
+{% endblock js %}

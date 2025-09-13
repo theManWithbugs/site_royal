@@ -1,31 +1,17 @@
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
+from .ultils import get_carrinho
+
 from . forms import *
 
-# def login_cliente(request):
-#     template_name = 'login_cliente.html'
+#Account
+#----------------------------------------------------------------------------#
 
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(request, username=username, password=password)
-
-#         if user is not None:
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             messages.error(request, 'Login ou senha incorretos!')
-
-#     return render(request, template_name)
-
-def logoutView(request):
-    auth_logout(request)
-    return redirect('login_cliente')
-
+#----------------------------------------------------------------------------#
 def login_cliente(request):
     template_name = 'login_cliente.html'
     if request.method == 'POST':
@@ -46,6 +32,11 @@ def login_cliente(request):
 
     return render(request, template_name)
 
+def logoutView(request):
+    auth_logout(request)
+    return redirect('login_cliente')
+
+#Add new user
 def formulario_cadastro(request):
     template_name = 'login_cliente.html'
 
@@ -66,7 +57,14 @@ def formulario_cadastro(request):
         return redirect('login_cliente')
 
     return render(request, template_name)
+#----------------------------------------------------------------------------#
 
+#----------------------------------------------------------------------------#
+
+#Main pages
+#----------------------------------------------------------------------------#
+
+#----------------------------------------------------------------------------#
 def base_view(request):
     template_name = 'base.html'
     return render(request, template_name)
@@ -74,28 +72,113 @@ def base_view(request):
 def home_view(request):
     template_name = 'home.html'
     return render(request, template_name)
+#----------------------------------------------------------------------------#
 
-def add_items(request):
-    template_name = 'add_pizza.html'
-    form_pizza = AddPizzaForm(request.POST or None)
-    form_sabor = AddSaborForm(request.POST or None)
+#----------------------------------------------------------------------------#
 
-    if request.method == 'POST':
-        if 'submit_pizza' in request.POST:
-            if form_pizza.is_valid():
-                form_pizza.save()
+#Products
+#----------------------------------------------------------------------------#
 
-        elif 'submit_sabor' in request.POST:
-            if form_sabor.is_valid():
-                form_sabor.save()
+#----------------------------------------------------------------------------#
+def pagina_teste(request):
+    template_name = 'pagina_test.html'
 
+    pizzas = Pizza.objects.all()
+
+    return render(request, template_name, {'pizzas': pizzas})
+
+def get_or_create_cart(request):
+    cart_id = request.COOKIES.get("cart_id")
+
+    if cart_id and Carrinho.objects.filter(uuid=cart_id).exists():
+        cart = Carrinho.objects.get(uuid=cart_id)  # só recupera
     else:
-        form_pizza = AddPizzaForm()
-        form_sabor = AddSaborForm()
+        cart = Carrinho.objects.create()  # cria um novo
+
+    return cart
+
+def pizzas_available(request):
+    template_name = 'pizzas.html'
+    return render(request, template_name)
+
+def drinks_available(request):
+    template_name= 'drinks.html'
+    return render(request, template_name)
+
+#Tratando aqui
+# def add_items(request):
+#     template_name = 'add_pizza.html'
+#     form_pizza = AddPizzaForm(request.POST or None)
+
+#     if request.method == 'POST':
+#         if form_pizza.is_valid():
+#             pizza = form_pizza.save(commit=False)
+#             pizza.save()
+#             form_pizza.save_m2m()
+
+#             carrinho = get_carrinho(request)
+#             CarrinhoItem.objects.create(carrinho=carrinho, pizza=pizza)
+
+#             messages.success(request, "Pizza adicionada ao carrinho!")
+#             print(carrinho)
+#             return redirect('add_items')
+
+#     return render(request, template_name, {'form_pizza': form_pizza})
+
+#----------------------------------------------------------------------------#
+
+#----------------------------------------------------------------------------#
+
+#Função para limpar carrinho
+# request.session.flush()
+
+#View para v er carrinho aqui
+def ver_carrinho(request):
+    carrinho = get_carrinho(request)
+    itens = carrinho.itens.all()  # todos os itens do carrinho
+    total = sum(item.subtotal() for item in itens)  # soma dos subtotais
 
     context = {
-        'form_pizza': form_pizza,
-        'form_sabor': form_sabor,
+        "carrinho": carrinho,
+        "itens": itens,
+        "total": total,
     }
+    return render(request, "carrinho.html", context)
 
-    return render(request, template_name, context)
+def add_pizza_sel(request, id):
+    template_name = 'add_pizza_sel.html'
+
+    #Quando se preciso de apenas um objeto é utilizado get_object_or_404
+    tamanho = get_object_or_404(Tamanho, id=id)
+
+    form_pizza = AddPizzaForm(request.POST or None, tamanho=tamanho)
+    if request.method == 'POST':
+        if form_pizza.is_valid():
+            pizza = form_pizza.save(commit=False)
+            pizza.tamanho = tamanho
+            try:
+                pizza.save()
+                form_pizza.save_m2m()
+            except Exception as e:
+                messages.error(f"Ocorreu um erro: {e}")
+
+            carrinho = get_carrinho(request)
+            CarrinhoItem.objects.create(carrinho=carrinho, pizza=pizza)
+
+            messages.success(request, "Pizza adicionada ao carrinho!")
+            print(carrinho)
+            return redirect('add_pizza_sel', id)
+
+    return render(request, template_name, {'form_pizza': form_pizza, 'id': id})
+
+def excluir_item(request, id):
+
+    pizza_obj = get_object_or_404(Pizza, id=id)
+
+    try:
+        pizza_obj.delete()
+        messages.success(request, 'Item excluido com sucesso!')
+    except Exception as e:
+        messages.error(request, f'Não foi possível realizar a ação: {e}')
+
+    return redirect('carrinho')

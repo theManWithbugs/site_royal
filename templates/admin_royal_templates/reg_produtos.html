@@ -5,10 +5,10 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-1 w-50">
     <div class="bg-white p-4 rounded">
       <div class="d-flex justify-content-center">
-        <h5>Registrar pizza</h5>
+        <h5>Pedir Pizza-(Visualização do cliente aqui!)</h5>
       </div>
         <form action="{% url 'admin_royal:reg_items' %}" method="post">{% csrf_token %}
             {{ form_pizza.as_p }}
@@ -17,7 +17,12 @@
     </div>
 </div>
 
-<div class="container mt-2">
+<hr>
+  <div class="container p-2 bg-white text-center text-warning rounded w-50">
+    <h5>Items registrado pela administração aqui abaixo</h5>
+  </div>
+
+<div class="container mt-2 w-50">
     <div class="bg-white p-4 rounded">
       <div class="d-flex justify-content-center">
         <h5>Registrar sabor</h5>
@@ -29,7 +34,7 @@
     </div>
 </div>
 
-<div class="container mt-2">
+<div class="container mt-2 w-50">
     <div class="bg-white p-4 rounded">
       <div class="d-flex justify-content-center">
         <h5>Registrar tamanho</h5>

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
+from core.models import *
 
 # Adiciona o campo telefone ao User como atributo extra
 User.add_to_class('telefone', models.CharField(max_length=20, unique=True, blank=False))
@@ -14,6 +15,8 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Informações extras', {'fields': ('telefone',)}),
     )
+
+admin.site.register(Carrinho)
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
