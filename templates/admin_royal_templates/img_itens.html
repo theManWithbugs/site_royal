@@ -1,0 +1,16 @@
+{% extends 'admin_royal_templates/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <div class="bg-white p-3 rounded">
+    <form action="{% url 'admin_royal:img_itens' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

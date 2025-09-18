@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="bg-white rounded p-3">
+    <h5 class="text-center">Por favor informe seu endereço</h5>
+    <form action="{% url 'info_adress' %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

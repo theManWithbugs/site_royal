@@ -5,14 +5,14 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Segurança
-# SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
-# DEBUG = os.environ.get("DEBUG", "False") == "True"
-# ALLOWED_HOSTS = ["localhost", os.environ.get("RENDER_EXTERNAL_HOSTNAME")]
+SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+ALLOWED_HOSTS = ["localhost", os.environ.get("RENDER_EXTERNAL_HOSTNAME")]
 
 # Antes de enviar o commit deve comentar isso
-SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
-DEBUG = os.environ.get("DEBUG", "False") == "False"
-ALLOWED_HOSTS = ["*"]
+# SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-secret")
+# DEBUG = os.environ.get("DEBUG", "False") == "False"
+# ALLOWED_HOSTS = ["*"]
 
 # Aplicações
 INSTALLED_APPS = [
@@ -84,8 +84,8 @@ MESSAGE_TAGS = {
 }
 
 # Internacionalização
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+LANGUAGE_CODE = 'pt-br'
+TIME_ZONE = 'America/Rio_Branco'
 USE_I18N = True
 USE_TZ = True
 

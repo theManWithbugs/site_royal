@@ -11,54 +11,82 @@
 </head>
 
 <body>
-   <div class="container-fluid p-0" style="min-height: 100vh; background-color: #f8f9fa;">
-   <!-- Menu lateral -->
-   <div class="row g-0">
-      <div class="col-md-2 bg-dark text-white p-3 d-flex flex-column" style="min-height: 100vh;">
-         <h4 class="mb-4">
-         <img src="{% static 'img/icone_motinha.png' %}" alt="logo" width="35" height="35" class="me-2">
-         Pizza Delivery
-         </h4>
-            <a href="{% url 'admin_royal:home' %}" class="text-white text-decoration-none py-2">🏠 Home</a>
-            <a href="#" class="text-white text-decoration-none py-2">📊 Dashboard</a>
-            <a href="#" class="text-white text-decoration-none py-2">🛒 Pedidos</a>
-            <a href="#" class="text-white text-decoration-none py-2">🍕 Cardápio</a>
-            <a href="#" class="text-white text-decoration-none py-2">⚙️ Configurações</a>
-            <a href="#" class="text-white text-decoration-none py-2">🛍️ Produtos Cadastrados</a>
-            <a href="{% url 'admin_royal:reg_items' %}" class="text-white text-decoration-none py-2" title="Registrar Produtos" aria-label="Registrar Produtos">📦 Registrar Produtos</a>
-            <a href="{% url 'admin_royal:menu_invest' %}" class="text-white text-decoration-none py-2">💰 Investimentos</a>
-            <a href="{% url 'admin_royal:logout' %}" class="text-white text-decoration-none py-2">🚪 Sair</a>
-      </div>
-
-      <div class="col py-3 content">
-            <div class="col-md-auto p-2">
-               <nav class="navbar navbar-light bg-danger text-white rounded mb-4 p-3">
-                  <span class="h5 mb-0" id="texto_navbar"></span>
-                  <div>
-                     <img src="{% static 'img/icone_motinha.png' %}" alt="icone" width="40" height="40">
-                  </div>
-               </nav>
+      <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+                    <img src="{% static 'img/icone_royal.jpg' %}" class="img-fluid mb-4 mt-3 rounded shadow-lg" alt="Logo">
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start gap-3">
+                        <li>
+                           <a href="{% url 'admin_royal:home' %}" class="text-dark text-decoration-none">🏠 <span class="navbar_text">Home</span></a>
+                        </li>
+                        <li>
+                           <a href="{% url 'admin_royal:comandas' %}" class="text-dark text-decoration-none d-flex align-items-center">🧾 <span class="navbar_text">Comandas</span></a>
+                        </li>
+                        <!-- <li>
+                           <a href="#" class="text-dark text-decoration-none">📊 Dashboard</a>
+                        </li> -->
+                        <li>
+                           <a href="#" class="text-dark text-decoration-none">🛒 <span class="navbar_text">Pedidos</span></a>
+                        </li>
+                        <li>
+                           <a href="#" class="text-dark text-decoration-none">🍕 <span class="navbar_text">Cardápio</span></a>
+                        </li>
+                        <!-- <li>
+                           <a href="#" class="text-dark text-decoration-none">⚙️ Configurações</a>
+                        </li> -->
+                        <li>
+                           <a href="#" class="text-dark text-decoration-none">🛍️ <span class="navbar_text">Produtos Cadastrados</span></a>
+                        </li>
+                        <li>
+                           <a href="{% url 'admin_royal:img_itens' %}" class="text-dark text-decoration-none">🖼️ <span class="navbar_text">Add Imagem de item</span></a>
+                        </li>
+                        <li>
+                           <a href="{% url 'admin_royal:reg_items' %}" class="text-dark text-decoration-none" title="Registrar Produtos" aria-label="Registrar Produtos">📦 <span class="navbar_text">Registrar Produtos</span></a>
+                        </li>
+                        <li>
+                           <a href="{% url 'admin_royal:menu_invest' %}" class="text-dark text-decoration-none">💰 <span class="navbar_text">Investimentos</span></a>
+                        </li>
+                        <li>
+                           <a href="{% url 'admin_royal:logout' %}" class="text-dark text-decoration-none">🚪 <span class="navbar_text">Sair</span></a>
+                        </li>
+                    </ul>
+                    <hr>
+                </div>
             </div>
-            <script src="{% static 'js/sweetalert2@11.js' %}"></script>
-            {% if messages %}
-               {% for message in messages %}
-                     <script>
-                        Swal.fire({
-                           position: "top",
-                           title: "{% if 'success' in message.tags %}Sucesso!{% else %}Mensagem!{% endif %}",
-                           icon: "{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}",
-                           text: "{{ message|escapejs }}",
-                           timer: 2500,
-                           showConfirmButton: false
-                        });
-                     </script>
-               {% endfor %}
-            {% endif %}
-            {% block content %}
-            {% endblock content %}
-         </div>
-   </div>
-   </div>
+
+            <div class="col py-3">
+              <!-- Sweat alert local file -->
+              <script src="{% static 'js/sweetalert2@11.js' %}"></script>
+              <!-- Alert messages in sweet alert -->
+              {% if messages %}
+                {% for message in messages %}
+                  <script>
+                    Swal.fire({
+                      position: "top",
+                      title: "{% if 'success' in message.tags %}Sucesso!{% else %}Mensagem!{% endif %}",
+                      icon: "{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}",
+                      text: "{{ message|escapejs }}",
+                      timer: 2500,
+                      showConfirmButton: false,
+                      draggable: true,
+                      backdrop: false
+                    });
+                  </script>
+                {% endfor %}
+              {% endif %}
+
+              <div class="col py-3">
+                  <div class="content-wrapper">
+                    <div class="content" id="scroll">
+                      {% block content %}
+                      {% endblock content %}
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
 </body>
 
 <!-- Gráficos -->

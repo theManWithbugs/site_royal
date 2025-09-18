@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from .ultils import get_carrinho
+from django.http import HttpResponse
 
 from . forms import *
 
@@ -34,7 +35,11 @@ def login_cliente(request):
 
 def logoutView(request):
     auth_logout(request)
-    return redirect('login_cliente')
+    return redirect('logout_page')
+
+def pagina_logout(request):
+    template_name= 'pagina_logout.html'
+    return render(request, template_name)
 
 #Add new user
 def formulario_cadastro(request):
@@ -105,26 +110,6 @@ def drinks_available(request):
     template_name= 'drinks.html'
     return render(request, template_name)
 
-#Tratando aqui
-# def add_items(request):
-#     template_name = 'add_pizza.html'
-#     form_pizza = AddPizzaForm(request.POST or None)
-
-#     if request.method == 'POST':
-#         if form_pizza.is_valid():
-#             pizza = form_pizza.save(commit=False)
-#             pizza.save()
-#             form_pizza.save_m2m()
-
-#             carrinho = get_carrinho(request)
-#             CarrinhoItem.objects.create(carrinho=carrinho, pizza=pizza)
-
-#             messages.success(request, "Pizza adicionada ao carrinho!")
-#             print(carrinho)
-#             return redirect('add_items')
-
-#     return render(request, template_name, {'form_pizza': form_pizza})
-
 #----------------------------------------------------------------------------#
 
 #----------------------------------------------------------------------------#
@@ -132,45 +117,81 @@ def drinks_available(request):
 #Função para limpar carrinho
 # request.session.flush()
 
-#View para v er carrinho aqui
+#View para ver carrinho aqui
 def ver_carrinho(request):
     carrinho = get_carrinho(request)
     itens = carrinho.itens.all()  # todos os itens do carrinho
     total = sum(item.subtotal() for item in itens)  # soma dos subtotais
 
+    carrinho_itens = CarrinhoItem.objects.values('carrinho__uuid', 'pizza__tamanho__nome', 'endereco__neighborhood').filter(carrinho=carrinho).first()
+
     context = {
         "carrinho": carrinho,
         "itens": itens,
         "total": total,
+        "check_carrinho": carrinho_itens
     }
     return render(request, "carrinho.html", context)
 
 def add_pizza_sel(request, id):
-    template_name = 'add_pizza_sel.html'
-
-    #Quando se preciso de apenas um objeto é utilizado get_object_or_404
     tamanho = get_object_or_404(Tamanho, id=id)
 
-    form_pizza = AddPizzaForm(request.POST or None, tamanho=tamanho)
     if request.method == 'POST':
-        if form_pizza.is_valid():
-            pizza = form_pizza.save(commit=False)
-            pizza.tamanho = tamanho
-            try:
-                pizza.save()
-                form_pizza.save_m2m()
-            except Exception as e:
-                messages.error(f"Ocorreu um erro: {e}")
+        obs = request.POST.get('obs')
+        pizza = Pizza.objects.create(tamanho=tamanho, observacoes=obs)
 
-            carrinho = get_carrinho(request)
-            CarrinhoItem.objects.create(carrinho=carrinho, pizza=pizza)
+        total_sabores = 0
+        for sabor in Sabor.objects.all():
+            qtd = int(request.POST.get(f"sabor_{sabor.id}", 0))
+            if qtd > 0:
+                PizzaSabor.objects.create(pizza=pizza, sabor=sabor, quantidade=qtd)
+                total_sabores += qtd
 
-            messages.success(request, "Pizza adicionada ao carrinho!")
-            print(carrinho)
-            return redirect('add_pizza_sel', id)
+        if total_sabores > tamanho.max_sabores:
+            pizza.delete()  # desfaz
+            messages.error(request, f"O tamanho {tamanho.nome} permite no máximo {tamanho.max_sabores} sabores.")
+            return redirect('add_pizza_sel', id=id)
 
-    return render(request, template_name, {'form_pizza': form_pizza, 'id': id})
+        carrinho = get_carrinho(request)
+        CarrinhoItem.objects.create(carrinho=carrinho, pizza=pizza)
+        messages.success(request, "Pizza adicionada ao carrinho!")
+        return redirect('carrinho')
 
+    return render(request, 'add_pizza_sel.html', {
+        'sabores': Sabor.objects.all(),
+        'tamanho': tamanho,
+        'id': id,
+    })
+
+
+def informar_endereco(request):
+    template_name = 'inform_endereco.html'
+    form = EnderecoForm(request.POST or None)
+
+    carrinho = get_carrinho(request)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            # Salva o endereço primeiro para gerar o ID no banco
+            endereco = form.save()
+
+            # Pega todos os itens do carrinho
+            carrinho_itens = CarrinhoItem.objects.filter(carrinho=carrinho)
+
+            # Associa o endereço a cada item e salva
+            for item in carrinho_itens:
+                item.endereco = endereco
+                item.save()
+
+            messages.success(request, 'Endereço adicionado com sucesso!')
+            return redirect('carrinho')
+    else:
+        form = EnderecoForm()
+
+    return render(request, template_name, {'form': form})
+
+
+#Only Action
 def excluir_item(request, id):
 
     pizza_obj = get_object_or_404(Pizza, id=id)
@@ -182,3 +203,36 @@ def excluir_item(request, id):
         messages.error(request, f'Não foi possível realizar a ação: {e}')
 
     return redirect('carrinho')
+
+def confirmar_pedido(request):
+    carrinho = get_carrinho(request)  # Função que retorna o carrinho atual
+    itens = carrinho.itens.all()
+
+    if not itens.exists():
+        return HttpResponse("Carrinho vazio!", status=400)
+
+    # Pega o endereço do primeiro item (assumindo que todos têm o mesmo endereço)
+    endereco = itens.first().endereco
+    if not endereco:
+        return HttpResponse("Endereço não definido!", status=400)
+
+    # Cria o pedido
+    pedido = PedidoRecebido.objects.create(carrinho=carrinho, endereco=endereco)
+
+    # Debug: imprime todos os itens do carrinho
+    for item in itens:
+        print(f"{item.quantidade}x {item.pizza} - Endereço: {item.endereco}")
+
+    return redirect('ped_finalizado')
+
+def pedido_finalizado(request):
+    template_name = 'nota_pedido.html'
+
+    carrinho = get_carrinho(request)
+    itens = carrinho.itens.all()
+
+    context = {
+        'itens': itens
+    }
+
+    return render(request, template_name, context)

@@ -2,15 +2,80 @@
 {% load static %}
 
 {% block content %}
-
 <div class="container mt-4">
-    <div class="bg-white p-4 rounded">
+    <div class="bg-light p-4 rounded shadow-sm">
+
         <form action="{% url 'add_pizza_sel' id %}" method="post">
             {% csrf_token %}
-            {{ form_pizza.as_p }}
-            <button type="submit" name="submit_pizza">Enviar</button>
+
+            {% if form_pizza.errors %}
+                <div class="alert alert-danger w-50 mx-auto">
+                    <ul>
+                        {% for field in form_pizza %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form_pizza.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for sabor in sabores %}
+                    {% if sabor.img_obj %}
+                        <div class="col">
+                            <div class="card h-100 text-center shadow-sm border-0" style="transition: transform 0.2s; background-color: #fff7ef;">
+                                <img src="{{ sabor.img_obj.arq.url }}" class="card-img-top" alt="{{ sabor.nome }}" style="height: 150px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color:#d9480f;">{{ sabor.nome }}</h5>
+                                    {% if sabor.preco_adicional > 0 %}
+                                        <p class="card-text"><small class="text-muted">(+R$ {{ sabor.preco_adicional }})</small></p>
+                                    {% endif %}
+
+                                    <!-- Campo bonito para número -->
+                                    <div class="input-group justify-content-center mt-2" style="max-width:120px; margin:auto;">
+                                        <button class="btn btn-pizza text-white" type="button" onclick="this.nextElementSibling.stepDown()">-</button>
+                                        <input type="number" name="sabor_{{ sabor.id }}" min="0" max="{{ tamanho.max_sabores }}" value="0" class="form-control text-center" style="border-color:#d9480f; color:#d9480f;">
+                                        <button class="btn btn-pizza text-white" type="button" onclick="this.previousElementSibling.stepUp()">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="form-floating mt-4">
+                <textarea class="form-control" placeholder="Deixe uma observação aqui" id="floatingTextarea2" style="height: 100px; border-color:#d9480f;" name="obs"></textarea>
+                <label for="floatingTextarea2">Observações</label>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-pizza btn-lg text-white" name="submit_pizza">Enviar</button>
+            </div>
         </form>
+
     </div>
 </div>
+<br><br>
 
+<!-- Estilos customizados -->
+<style>
+    .btn-pizza {
+        background-color: #d9480f; /* vermelho alaranjado */
+        border-color: #d9480f;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+    .btn-pizza:hover {
+        background-color: #f76707; /* laranja mais vibrante */
+        transform: scale(1.05);
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+</style>
 {% endblock content %}

@@ -12,7 +12,11 @@ urlpatterns = [
   path('investimentos/', views.menu_investimentos, name='menu_invest'),
   path('home/reg_items/', views.reg_items_view, name='reg_items'),
 
+  path('home/img_itens/', views.img_itens_view, name='img_itens'),
+
   # API class view comes above here
   path('response_invest/',  response_invest.as_view(), name='res_invest'),
   path('response_titulo/', response_titulo.as_view(), name='res_titulo'),
+
+  path('home/comandas/', views.pedidos_view, name='comandas')
 ]

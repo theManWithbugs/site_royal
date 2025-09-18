@@ -1,0 +1,34 @@
+{% extends 'admin_royal_templates/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+
+{% for x in comandas %}
+  {% if x.status == False %}
+    <div class="container">
+      <div class="list-group p-3">
+        <a href="#" class="list-group-item list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ x.endereco }}</h5>
+          </div>
+            <h4>Itens do pedido:</h4>
+            <ul>
+              {% for item in x.carrinho.itens.all %}
+                <li>
+                  ({{ item.quantidade }}) {{ item.pizza }} - R$ {{ item.subtotal }}
+                  <br>
+                  Sabores:
+                  {% for sabor in item.pizza.sabores.all %}
+                    {{ sabor.nome }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </li>
+              {% endfor %}
+            </ul>
+          <small class="text-muted">{{ x.criado_em }}</small>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+{% endblock content %}

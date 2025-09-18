@@ -70,3 +70,13 @@ class FormSizePizza(forms.ModelForm):
         super(FormSizePizza, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+class AddItemImage(forms.ModelForm):
+    class Meta:
+        model = ImgItems
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(AddItemImage, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'

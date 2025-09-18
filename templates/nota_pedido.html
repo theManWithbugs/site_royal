@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <h2 class="text-center mb-4">🛒 Meu Carrinho</h2>
+
+    {% if itens %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Pizza</th>
+                    <th>Sabores</th>
+                    <!-- <th>Quantidade</th> -->
+                    <th>Preço</th>
+                    <th>Subtotal</th>
+                    <th>Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens %}
+                    <tr>
+                        <td>{{ item.pizza.tamanho.nome }}</td>
+                        <td>
+                            {% for sabor in item.pizza.sabores.all %}
+                                {{ sabor.nome }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <!-- <td>{{ item.quantidade }}</td> -->
+                        <td>R$ {{ item.pizza.calcular_preco }}</td>
+                        <td>R$ {{ item.subtotal }}</td>
+                        <td>
+                            <a href="{% url 'excluir_item' item.pizza.id %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Excluir
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+{% endblock content %}

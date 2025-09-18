@@ -9,6 +9,7 @@ from rest_framework.renderers import JSONRenderer
 from django.db.models import Sum
 from . serializers import *
 from . forms import *
+from core.models import *
 
 def login_view(request):
     template_name = 'admin_royal_templates/login.html'
@@ -134,3 +135,29 @@ class response_titulo(APIView):
 
         serialized_data = InvestTituloSeria(objs_adjust, many=True)
         return Response(serialized_data.data)
+
+def img_itens_view(request):
+    template_name = 'admin_royal_templates/img_itens.html'
+
+    form = AddItemImage(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, "Operação realizada com sucesso!")
+            except Exception as e:
+                messages.error(request, f"Ocorreu um erro: {e}")
+        else:
+            messages.error(request, "Formulario invalido!")
+    else:
+        form = AddItemImage()
+
+    return render(request, template_name, {'form': form})
+
+def pedidos_view(request):
+    template_name = 'admin_royal_templates/pedidos.html'
+
+    comandas = PedidoRecebido.objects.all().order_by('criado_em')
+
+    return render(request, template_name, {'comandas': comandas})
