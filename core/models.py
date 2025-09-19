@@ -20,7 +20,7 @@ class Tamanho(models.Model):
 
 class ImgItems(models.Model):
     nome_item = models.CharField(max_length=80)
-    arq = models.FileField(upload_to='img')
+    arq = models.FileField(upload_to='static/img')
 
     def __str__(self):
         return self.nome_item

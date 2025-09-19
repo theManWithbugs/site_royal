@@ -19,4 +19,12 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(Carrinho)
 
 admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+
+admin.site.register(User)
+admin.site.register(ImgItems)
+admin.site.register(Pizza)
+admin.site.register(PizzaSabor)
+admin.site.register(Tamanho)
+admin.site.register(ClienteAdress)
+admin.site.register(CarrinhoItem)
+admin.site.register(PedidoRecebido)
